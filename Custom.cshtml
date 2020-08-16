@@ -1,0 +1,886 @@
+﻿@using FastCheckInMVC.Controllers;
+@using FastCheckInModels.Models;
+
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var config = ViewBag.Config as SettingsModel;
+    var format = ViewBag.Format as globalAttributesModel;
+    var privacy = ViewBag.Privacy as PrivacyPolicyModel;
+
+    var configurationform = ViewBag.ConfigurationForm as ConfigurationFormModel;
+    List<LanguagesMessagesModel> langmessages = new List<LanguagesMessagesModel>();
+
+    langmessages = ViewBag.langmessages;
+    var sumwidth = 0;
+
+    List<CheckedBoxItemModel> templist = new List<CheckedBoxItemModel>();
+    List<CheckedBoxItemModel> hiddentemplist = new List<CheckedBoxItemModel>();
+}
+
+@using (Html.BeginForm())
+{
+    <link rel="stylesheet" href="~/Styles/style.css">
+    <link rel="stylesheet" href="~/Styles/imgstyle.css">
+
+    <body id="contentMainForm" class="custom-full-height custom-flex-column custom-header" style="background-color:whitesmoke; " data-bind="with: LanguageHandler">
+        <div class="custom-flex-row custom-flex-10 custom-flex-center headerstyling" style="margin-bottom:10px;">
+            @*<figure class="header-photo">
+                    <img style="height:175px;" src="~/Resources/image.png" />
+                </figure>*@
+            <div class="box">
+                <div class="imgBx">
+                    <img style="" src="~/Resources/image.png">
+                    <h2 style="color:black; ">Enjoy your stay </h2>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="custom-flex-row custom-flex-5 custom-flex-start " style="background-color:@format.sectionBackgroundColor;height:150%; ">
+            <div class="custom-flex-row custom-flex-5 custom-flex-start"></div>
+            <div class="custom-flex-row custom-flex-100 custom-flex-start  heading-primary">
+                <label class="heading-primary--main  custom-flex-100 " style="height:70%; font-size:140%; text-align:left; margin-top:5px; margin-left:10px; color:#fff;">Welcome</label>
+            </div>
+
+            <div class="custom-flex-row custom-flex-50 custom-flex-start">
+            </div>
+            <div class="custom-flex-row custom-flex-35 custom-flex-start">
+            </div>
+            <div class="custom-flex-row custom-flex-10 custom-flex-start ">
+                <a class="selection-button  mrglf" href="#" id="DecreaseFont_Clicked" style=" width:3rem; margin-right:.5rem; font-size:14px;background-color:white; text-decoration:none; border:1px solid black;color:black;">A</a>
+            </div>
+            <div class=" custom-flex-row custom-flex-10 custom-flex-start " style="margin-left:-17px;">
+                <a class="selection-button " href="#" id="IncreaseFont_Clicked" style="width:3rem; margin-right:3rem; color:black;background-color:white;font-size:14px;text-decoration:none; border:1px solid black;">A</a>
+            </div>
+        </div>
+        <div class="custom-flex-row custom-flex-50 custom-flex-start" style="margin-top:10px;">
+        </div>
+        <div class="custom-flex-row custom-flex-5 custom-flex-start">
+            <div class="custom-flex-row custom-flex-9 custom-flex-start">
+            </div>
+            <label class="custom-flex-100 custom-flex-start labelstyling" data-bind="text: selectedDictionary() != null?selectedDictionary().ChooseTitle:null"></label>
+            <div class="custom-flex-row custom-flex-9 custom-flex-start">
+            </div>
+            <label class="custom-flex-100 custom-flex-start labelstyling" data-bind="text: selectedDictionary() != null?selectedDictionary().ChooseLanguage:null">Choose language</label>
+        </div>
+        <div class="custom-flex-row custom-flex-17 custom-flex-start">
+            <div class="custom-flex-row custom-flex-6 custom-flex-center">
+            </div>
+            <div class="custom-flex-row custom-flex-61 custom-flex-start">
+                <a href="javascript:;"  class="selection-button" id="Mr" style="background-color:white; text-decoration:none; border:1px solid black;color:black;" onclick="setColor('Mr', null, null, '@format.sectionBackgroundColor.ToString()')" ; data-bind="text: selectedDictionary() != null?selectedDictionary().MrTitle:null"></a>
+                <a href="javascript:;"  class="selection-button" id="Mrs" style="background-color:white; text-decoration:none; border:1px solid black;color:black;" onclick="setColor(null,'Mrs',null,'@format.sectionBackgroundColor.ToString()')" ; data-bind="text: selectedDictionary() != null?selectedDictionary().MrsTitle:null"></a>
+                <a href="javascript:;"  class="selection-button" id="Ms" style="background-color:white; text-decoration:none; border:1px solid black;color:black;" onclick="setColor(null,null,'Ms','@format.sectionBackgroundColor.ToString()')" ; data-bind="text: selectedDictionary() != null?selectedDictionary().MsTitle:null"></a>
+            </div>
+            <div class="custom-flex-row custom-flex-80 custom-flex-center">
+                <div class="custom-flex-row custom-flex-8 custom-flex-start">
+                </div>
+                <select style="        height: 32px;
+        align-self: center;
+        font-size: 14px;" class="custom-flex-76 custom-flex-end entrystyling" id="availableLanguages" data-bind="options: availableLanguages(), optionsText: 'Name', optionsValue: 'Code', value: SignalRHandler.customer() != null?SignalRHandler.customer().LanguageCode:'English', event: { change: GetSelectedLanguage.bind($data) }">
+                </select>
+            </div>
+        </div>
+        <div class="custom-flex-row custom-flex-50 custom-flex-start" style="margin-top:10px;">
+        </div>
+        <div class="custom-flex-row custom-flex-5 custom-flex-start">
+            <div class="custom-flex-row custom-flex-9 custom-flex-start">
+            </div>
+            <label class="custom-flex-100 custom-flex-start labelstyling"></label>
+            <div class="custom-flex-row custom-flex-9 custom-flex-start">
+            </div>
+            @*<label class="custom-flex-100 custom-flex-start labelstyling" data-bind="text: selectedDictionary() != null?selectedDictionary().Country:null">Country</label>*@
+        </div>
+        <div class="custom-flex-row custom-flex-17 custom-flex-start">
+            <div class="custom-flex-row custom-flex-6 custom-flex-center">
+            </div>
+            <div class="custom-flex-row custom-flex-61 custom-flex-start">
+            </div>
+            <div class="custom-flex-row custom-flex-80 custom-flex-center">
+                <div class="custom-flex-row custom-flex-8 custom-flex-start">
+                </div>
+                @*<select style="height:32px;align-self:center; font-size:14px;" class="custom-flex-76 custom-flex-end entrystyling" id="inputCountry" placeholder="Select" data-bind="options: ResourceHandler.nationalities(), optionsText: 'NatCode', optionsValue: 'NatId',value: SignalRHandler.customer() != null?SignalRHandler.customer().Nationality:88, event: { change: GetSelectedLanguage.bind($data) }">
+                    </select>*@
+            </div>
+        </div>
+
+        @foreach (CheckedBoxItemModel model in Model)
+        {
+
+            if (model.ControlName == "CheckAllAds")
+            {
+                continue;
+            }
+
+            if (sumwidth == 100)
+            {
+
+                if (templist.Count() == 1)
+                {
+                    <div class="custom-flex-row custom-flex-5" style="margin:10px;"></div>
+                    @Html.Partial("_InputPartial", templist)
+                    templist.Clear();
+                    sumwidth = 0;
+
+                    if (model.IsVisible == true)
+                    {
+                        sumwidth = sumwidth + model.Width;
+                        templist.Add(model);
+                    }
+                    else
+                    {
+                        hiddentemplist.Add(model);
+                    }
+                }
+                else
+                {
+                    <div class="custom-flex-row custom-flex-5" style="margin:10px;"></div>
+                    @Html.Partial("_InputPartial", templist)
+                    templist.Clear();
+                    sumwidth = 0;
+                    if (model.IsVisible == true)
+                    {
+                        sumwidth = sumwidth + model.Width;
+                        templist.Add(model);
+                    }
+                    else
+                    {
+                        hiddentemplist.Add(model);
+                    }
+                }
+            }
+            else if (sumwidth == 99)
+            {
+                <div class="custom-flex-row custom-flex-5" style="margin:10px;"></div>
+                @Html.Partial("_InputPartial", templist)
+                templist.Clear();
+                sumwidth = 0;
+                if (model.IsVisible == true)
+                {
+                    sumwidth = sumwidth + model.Width;
+                    templist.Add(model);
+                }
+                else
+                {
+                    hiddentemplist.Add(model);
+                }
+            }
+            else
+            {
+
+                if (model.IsVisible == true)
+                {
+
+
+                    sumwidth = sumwidth + model.Width;
+                    if (sumwidth > 100)
+                    {
+
+                        var overlappingwidth = templist[0].Width;
+                        @Html.Partial("_InputPartial", templist)
+                        templist.Clear();
+                        sumwidth = sumwidth - overlappingwidth;
+
+                    }
+                    templist.Add(model);
+                }
+                else
+                {
+                    hiddentemplist.Add(model);
+                }
+            }
+        }
+        <div class="hiddenstyling">
+            @foreach (CheckedBoxItemModel mod in hiddentemplist)
+            {
+                @Html.TextBox("_", null, new { @class = "custom-flex-100 custom-flex-start  hiddenstyling", @style = "border-color:black;text-align:start", @id = mod.ControlName })
+            }
+        </div>
+
+        <footer style="margin-top:20px;">
+            <div class="custom-flex-row custom-flex-5 " style="margin-bottom:5px;">
+                <h2 class="privacystyling custom-flex-row custom-flex-100" style="width:100%">Privacy Policy</h2>
+            </div>
+            <div class="custom-flex-row custom-flex-5 " style="margin-bottom:5px;">
+                <p class="privacystyling" data-bind="html: selectedDictionary() != null?selectedDictionary().privacyPolicyDescription:null"></p>
+            </div>
+            <div class="custom-flex-row custom-flex-5 " style="margin-top:3.5rem;">
+                <div class=" custom-flex-center custom-flex-row custom-flex-30"></div>
+                <a class="btn btn--custom btn--animated custom-flex-center custom-flex-row custom-flex-40" onclick="placeSignatureBtn()">Place Your Signature</a>
+                <div class=" custom-flex-center custom-flex-row custom-flex-30"></div>
+            </div>
+            @*@Html.Partial("_footerPartial", Model)*@
+        </footer>
+    </body>
+
+}
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        LanguageHandler.SetApi("@ViewBag.config.url");
+        LanguageHandler.GetTranslations();
+        if (localStorage.GlobalLanguageCode) {
+            LanguageHandler.ChangeLanguage(localStorage.GlobalLanguageCode);
+        }
+        ResourceHandler.SetApi("@ViewBag.config.url");
+        ResourceHandler.InitializeResources();
+        SignalRHandler.SetApi("@ViewBag.config.url");
+        SignalRHandler.Connect("@ViewBag.config.grpname");
+
+        SignalRHandler.customer() = null;
+
+        localStorage.ConfigURL = "@ViewBag.config.url";
+        localStorage.ConfigGroupName = "@ViewBag.config.grpname";
+        localStorage.ConfigHotelName = "@ViewBag.config.hotelname";
+
+        var changeLanguageAuto = ko.computed(function () {
+            if (SignalRHandler.customer() != null) {
+                LanguageHandler.ChangeLanguage(SignalRHandler.customer().LanguageCode);
+                localStorage.GlobalLanguageCode = SignalRHandler.customer().LanguageCode;
+
+                var property1 = document.getElementById("Mr");
+                property1.style.backgroundColor = "white";
+                var property2 = document.getElementById("Mrs");
+                property2.style.backgroundColor = "white";
+                var property3 = document.getElementById("Ms");
+                property3.style.backgroundColor = "white";
+
+                if (SignalRHandler.customer().titel == "Mr")
+                    property1.style.backgroundColor = "@format.sectionBackgroundColor";
+                else if (SignalRHandler.customer().titel == "Mrs")
+                    property2.style.backgroundColor =  "@format.sectionBackgroundColor";
+                else if (SignalRHandler.customer().titel == "Ms")
+                    property3.style.backgroundColor =  "@format.sectionBackgroundColor";
+
+
+
+
+                     var FirstNamelbl = document.getElementById('FirstNamelbl');
+                if (FirstNamelbl != undefined) {
+                    if (LanguageHandler.selectedDictionary() != null)
+                        FirstNamelbl.innerHTML = LanguageHandler.selectedDictionary().FirstName;
+                }
+
+               var LastNamelbl = document.getElementById('LastNamelbl');
+                if (LastNamelbl != undefined) {
+                    if (LanguageHandler.selectedDictionary() != null)
+                        LastNamelbl.innerHTML = LanguageHandler.selectedDictionary().LastName;
+                }
+
+                                var Passportlbl = document.getElementById('Passportlbl');
+                if (Passportlbl != undefined) {
+                    if (LanguageHandler.selectedDictionary() != null)
+                        Passportlbl.innerHTML = LanguageHandler.selectedDictionary().Passport;
+                }
+
+                var Streetlbl = document.getElementById('Streetlbl');
+                if (Streetlbl != undefined) {
+                    if (LanguageHandler.selectedDictionary() != null)
+                        Streetlbl.innerHTML = LanguageHandler.selectedDictionary().Street;
+                }
+
+                              var ZipCodelbl = document.getElementById('ZipCodelbl');
+                if (ZipCodelbl != undefined) {
+                    if (LanguageHandler.selectedDictionary() != null)
+                        ZipCodelbl.innerHTML = LanguageHandler.selectedDictionary().ZipCode;
+                }
+
+                 var Citylbl = document.getElementById('Citylbl');
+                if (Citylbl != undefined) {
+                    if (LanguageHandler.selectedDictionary() != null)
+                        Citylbl.innerHTML = LanguageHandler.selectedDictionary().City;
+                }
+
+                 var Emaillbl = document.getElementById('Emaillbl');
+                if (Emaillbl != undefined) {
+                    if (LanguageHandler.selectedDictionary() != null)
+                        Emaillbl.innerHTML = LanguageHandler.selectedDictionary().Email;
+                }
+                var Mobilelbl = document.getElementById('Mobilelbl');
+                if (Mobilelbl != undefined) {
+                    if (LanguageHandler.selectedDictionary() != null)
+                        Mobilelbl.innerHTML = LanguageHandler.selectedDictionary().Mobile;
+                }
+                var Departurelbl = document.getElementById('Departurelbl');
+                if (Departurelbl != undefined) {
+                    if (LanguageHandler.selectedDictionary() != null)
+                        Departurelbl.innerHTML = LanguageHandler.selectedDictionary().Departure;
+                }
+                var DateOfBirthlbl = document.getElementById('DateOfBirthlbl');
+                if (DateOfBirthlbl != undefined) {
+                    if (LanguageHandler.selectedDictionary() != null)
+                        DateOfBirthlbl.innerHTML = LanguageHandler.selectedDictionary().DateOfBirth;
+                }
+
+                if (SignalRHandler.customer().FirstName != null) {
+                    var inputFirstName = SignalRHandler.customer().FirstName;
+                    document.getElementById('FirstName').value = inputFirstName;
+                }
+
+                var inputLastName = SignalRHandler.customer().LastName;
+                document.getElementById('LastName').value = inputLastName;
+
+                var inputPassportNo = SignalRHandler.customer().Passport;
+                document.getElementById('Passport').value = inputPassportNo;
+
+                var inputStreetAddress =  SignalRHandler.customer().Street;
+                document.getElementById('Street').value = inputStreetAddress;
+
+                var inputZipcode = SignalRHandler.customer().ZipCode;
+                document.getElementById('ZipCode').value = inputZipcode;
+
+                var inputCity = SignalRHandler.customer().City;
+                document.getElementById('City').value = inputCity;
+
+                //var inputCheckAllAds = SignalRHandler.customer().CheckAllAds;
+                //document.getElementById('CheckAllAds').value = inputCheckAllAds;
+
+                //var inputCountry = SignalRHandler.customer().Country;
+                //document.getElementById('Country').value = inputCountry;
+
+                var inputEmail = SignalRHandler.customer().Email;
+                document.getElementById('Email').value = inputEmail;
+
+                var inputMobile = SignalRHandler.customer().Mobile;
+                document.getElementById('Mobile').value = inputMobile;
+
+                var inputRoom = SignalRHandler.customer().Room
+                document.getElementById('Room').value = inputRoom;
+
+                var inputBirthday =  SignalRHandler.customer().DateOfBirth;
+                document.getElementById('DateOfBirth').value = inputBirthday;
+
+                var inputEmail =  SignalRHandler.customer().Email;
+                document.getElementById('Email').value = inputEmail;
+
+                var inputMemberId = SignalRHandler.customer().MemberId;
+                document.getElementById('MemberId').value = inputMemberId;
+
+                var inputCompany = SignalRHandler.customer().Company;
+                document.getElementById('Company').value = inputCompany;
+
+                var inputCountryId =  SignalRHandler.customer().CountryId;
+                document.getElementById('CountryId').value = inputCountryId;
+
+                var inputCreditCard = SignalRHandler.customer().CreditCard;
+                document.getElementById('CreditCard').value = inputCreditCard;
+
+                var inputPhone = SignalRHandler.customer().Mobile;
+                 document.getElementById('Mobile').value = inputPhone;
+
+                var inputNationality = SignalRHandler.customer().Nationality;
+                document.getElementById('Nationality').value = inputNationality;
+
+                //var inputMethodOfPayment =  SignalRHandler.customer().MethodOfPayment;
+                //document.getElementById('MethodOfPayment').value = inputMethodOfPayment;
+
+                //var inputLanguageId = document.getElementById('LanguageId').value;
+                //inputLanguageId = SignalRHandler.customer().LanguageId;
+
+                //var inputLanguageCode = document.getElementById('LanguageCode').value;
+                //inputLanguageCode = SignalRHandler.customer().LanguageCode;
+
+                var inputSignature = document.getElementById('Signature').value;
+                inputSignature = SignalRHandler.customer().Signature;
+
+                //var inputUser = document.getElementById('User').value;
+                //inputUser =  SignalRHandler.customer().User;
+
+                //var inputTimestamp = document.getElementById('Timestamp').value;
+                //inputTimestamp = SignalRHandler.customer().Timestamp;
+
+                var inputShowPrice = document.getElementById('ShowPrice').value;
+                inputShowPrice = SignalRHandler.customer().ShowPrice;
+
+                var inputPrice = document.getElementById('Price').value;
+                inputPrice = SignalRHandler.customer().Price;
+
+                //var inputIInvoice = document.getElementById('Invoice').value;
+                //inputIInvoice = SignalRHandler.customer().Invoice;
+
+                //var inputSendTextMessageValue = document.getElementById('SendTextMessageValue').value;
+                //inputSendTextMessageValue = SignalRHandler.customer().SendTextMessageValue;
+
+                var inputAfm = document.getElementById('Afm').value;
+                inputAfm =  SignalRHandler.customer().Afm;
+
+                var inputAcceptanceText = document.getElementById('AcceptanceText').value;
+                inputAcceptanceText  =  SignalRHandler.customer().AcceptanceText;
+
+                //var inputSignalRId = document.getElementById('SignalRId').value;
+                //inputSignalRId = SignalRHandler.customer().SignalRId;
+
+                var inputInvoiceAfm = document.getElementById('InvoiceAfm').value;
+                inputInvoiceAfm = SignalRHandler.customer().InvoiceAfm;
+
+                var inputInvoiceCompany = document.getElementById('InvoiceCompany').value;
+                inputInvoiceCompany  = SignalRHandler.customer().InvoiceCompany;
+
+                var inputInvoiceOccupation = document.getElementById('InvoiceOccupation').value;
+                inputInvoiceOccupation = SignalRHandler.customer().InvoiceOccupation;
+
+                var inputInvoiceCity = document.getElementById('InvoiceCity').value;
+                inputInvoiceCity = SignalRHandler.customer().InvoiceCity;
+
+                var inputInvoiceStreet = document.getElementById('InvoiceStreet').value;
+                inputInvoiceStreet = SignalRHandler.customer().InvoiceStreet;
+
+                var inputInvoiceZipCode = document.getElementById('InvoiceZipCode').value;
+                inputInvoiceZipCode = SignalRHandler.customer().InvoiceZipCode;
+
+                var inputInvoiceCountry = document.getElementById('InvoiceCountry').value;
+                inputInvoiceCountry = SignalRHandler.customer().InvoiceCountry;
+
+                //var inputStatus = document.getElementById('Status').value;
+                //inputStatus = SignalRHandler.customer().Status;
+
+                var inputCheckedItem1Value = document.getElementById('CheckedItem1').value;
+                var inputCheckedItem2Value = document.getElementById('CheckedItem2').value;
+                var inputCheckedItem3Value = document.getElementById('CheckedItem3').value;
+                var inputCheckedItem4Value = document.getElementById('CheckedItem4').value;
+                var inputCheckedItem5Value = document.getElementById('CheckedItem5').value;
+                var inputCheckedItem6Value = document.getElementById('CheckedItem6').value;
+                var inputCheckedItem7Value = document.getElementById('CheckedItem7').value;
+
+                inputCheckedItem1Value   = SignalRHandler.customer().CheckedItem1Value;
+                inputCheckedItem2Value   = SignalRHandler.customer().CheckedItem2Value;
+                inputCheckedItem3Value   = SignalRHandler.customer().CheckedItem3Value;
+                inputCheckedItem4Value   = SignalRHandler.customer().CheckedItem4Value;
+                inputCheckedItem5Value   = SignalRHandler.customer().CheckedItem5Value;
+                inputCheckedItem6Value   = SignalRHandler.customer().CheckedItem6Value;
+                inputCheckedItem7Value   = SignalRHandler.customer().CheckedItem7Value;
+
+                //var inputAcceptMail = document.getElementById('AcceptMail').value;
+                //inputAcceptMail = SignalRHandler.customer().AcceptMail;
+
+                //var inputgender = document.getElementById('gender').value;
+                //inputgender = SignalRHandler.customer().gender;
+
+                //var inputtitel = document.getElementById('titel').value;
+                //inputtitel = SignalRHandler.customer().titel;
+
+                    }
+
+        });
+    });
+
+
+    function changeLabels () {
+        // var FirstNamelbl = document.getElementById('FirstNamelbl');
+        //var fname = document.getElementById('fname');
+        //if (FirstNamelbl != undefined) {
+        //    if (LanguageHandler.selectedDictionary() != null)
+        //    {
+        //        FirstNamelbl.innerText = fname.innerText;
+        //    }
+        //}
+
+
+
+    }
+    function GetSelectedLanguage(lang) {
+        changeLabels();
+        var e = document.getElementById("availableLanguages");
+        var selectedLng = e.options[e.selectedIndex].value;
+        LanguageHandler.ChangeLanguage(selectedLng);
+        localStorage.GlobalLanguageCode = selectedLng;
+        changeLabels();
+    }
+
+
+    function placeSignatureBtn() {
+
+        var inputFirstName = document.getElementById('FirstName').value;
+        var inputLastName = document.getElementById('LastName').value;
+        var inputPassportNo = document.getElementById('Passport').value;
+        var inputStreetAddress = document.getElementById('Street').value;
+        var inputZipcode = document.getElementById('ZipCode').value;
+        var inputCity = document.getElementById('City').value;
+        //var inputCountry = document.getElementById('Country').value;
+        var inputMobile = document.getElementById('Mobile').value;
+        var inputRoom = document.getElementById('Room').value;
+        var inputBirthday = document.getElementById('DateOfBirth').value;
+        //var inputAcceptEmails = document.getElementById('AcceptMail').value;
+      //  var inputCheckAllAds = document.getElementById('CheckAllAds').value;
+       var inputMemberId = document.getElementById('MemberId').value;
+       var inputEmail = document.getElementById('Email').value;
+       var inputCompany = document.getElementById('Company').value;
+       var inputCountryId = document.getElementById('CountryId').value;
+       var inputCreditCard = document.getElementById('CreditCard').value;
+       var inputPhone = document.getElementById('Mobile').value;
+       var inputNationality = document.getElementById('Nationality').value;
+      var inputMethodOfPayment = document.getElementById('MethodOfPayment').value;
+      //var inputLanguageId = document.getElementById('LanguageId').value;
+      //var inputLanguageCode = document.getElementById('LanguageCode').value;
+      var inputSignature = document.getElementById('Signature').value;
+      //var inputUser = document.getElementById('User').value;
+      //var inputTimestamp = document.getElementById('Timestamp').value;
+      var inputShowPrice = document.getElementById('ShowPrice').value;
+      var inputPrice = document.getElementById('Price').value;
+      //var inputIInvoice = document.getElementById('Invoice').value;
+      //var inputSendTextMessageValue = document.getElementById('SendTextMessageValue').value;
+      var inputAfm = document.getElementById('Afm').value;
+      var inputAcceptanceText = document.getElementById('AcceptanceText').value;
+        //var inputSignalRId = document.getElementById('SignalRId').value;
+        //var inputIInvoice = document.getElementById('Invoice').value;
+      var inputInvoiceAfm = document.getElementById('InvoiceAfm').value;
+      var inputInvoiceCompany = document.getElementById('InvoiceCompany').value;
+      var inputInvoiceOccupation = document.getElementById('InvoiceOccupation').value;
+      var inputInvoiceCity = document.getElementById('InvoiceCity').value;
+      var inputInvoiceStreet = document.getElementById('InvoiceStreet').value;
+      var inputInvoiceZipCode = document.getElementById('InvoiceZipCode').value;
+      var inputInvoiceCountry = document.getElementById('InvoiceCountry').value;
+      //var inputStatus = document.getElementById('Status').value;
+      var inputCheckedItem1Value = document.getElementById('CheckedItem1').value;
+      var inputCheckedItem2Value = document.getElementById('CheckedItem2').value;
+      var inputCheckedItem3Value = document.getElementById('CheckedItem3').value;
+      var inputCheckedItem4Value = document.getElementById('CheckedItem4').value;
+      var inputCheckedItem5Value = document.getElementById('CheckedItem5').value;
+      var inputCheckedItem6Value = document.getElementById('CheckedItem6').value;
+        var inputCheckedItem7Value = document.getElementById('CheckedItem7').value;
+          //var inputDeparture = document.getElementById('DepartureDate').value;
+         //var inputAcceptMail = document.getElementById('AcceptMail').value;
+        //var inputgender = document.getElementById('gender').value;
+        // var inputtitel = document.getElementById('titel').value;
+
+                var property1 = document.getElementById("Mr");
+            if (property1.style.backgroundColor == '@format.sectionBackgroundColor.ToString()')
+                title = "Mr";
+
+                var property2 = document.getElementById("Mrs");
+            if (property2.style.backgroundColor ==  '@format.sectionBackgroundColor.ToString()')
+                title = "Mrs";
+
+                var property3 = document.getElementById("Ms");
+            if (property3.style.backgroundColor ==  '@format.sectionBackgroundColor.ToString()')
+                     title = "Ms";
+
+            var flag = ValidateEmail(inputEmail);
+
+            var customerData = {
+            FirstName: inputFirstName,
+            LastName: inputLastName,
+            Passport: inputPassportNo,
+            Street: inputStreetAddress,
+            ZipCode: inputZipcode,
+            City: inputCity,
+            //Country: inputCountry,
+            Email: inputEmail,
+            ClientName: "",
+            Mobile: inputMobile,
+            Room: inputRoom,
+            //SendEmailValue: inputAcceptEmails,
+            CheckAllAds: false,
+            //SendLetterValue:sendletter,
+            SendPhoneValue: inputPhone,
+            BirtdhdayDate:inputBirthday,
+            ReservationNo: SignalRHandler.customer().ReservationNo,
+            //Arrival: SignalRHandler.customer().Arrival,
+            //Departure: inputDeparture,
+            MemberId:inputMemberId,
+            Company:inputCompany,
+            CountryId: inputCountryId,
+            Phone: inputPhone,
+            CreditCard: inputCreditCard,
+            Nationality: inputNationality,
+            MethodOfPayment: inputMethodOfPayment,
+            //LanguageId: inputLanguageId,
+            //LanguageCode: inputLanguageCode,
+            Signature: inputSignature,
+            //User: inputUser,
+            //timestamp: inputTimestamp,
+            ShowPrice: inputShowPrice,
+            Price: inputPrice,
+             //Invoice: inputIInvoice,
+             Afm: inputAfm,
+             AcceptanceText: inputAcceptanceText,
+             //SignalRId: inputSignalRId,
+             InvoiceAfm: inputInvoiceAfm,
+             InvoiceCompany: inputInvoiceCompany,
+             InvoiceOccupation: inputInvoiceOccupation,
+             InvoiceCity: inputInvoiceCity,
+             InvoiceStreet: inputInvoiceStreet,
+             InvoiceZipCode: inputInvoiceZipCode,
+             InvoiceCountry: inputInvoiceCountry,
+             //Status: inputStatus,
+             //SendTextMessageValue: inputSendTextMessageValue,
+             CheckedItem1Value:inputCheckedItem1Value,
+             CheckedItem2Value:inputCheckedItem2Value,
+             CheckedItem3Value:inputCheckedItem3Value,
+             CheckedItem4Value:inputCheckedItem4Value,
+             CheckedItem5Value:inputCheckedItem5Value,
+             CheckedItem6Value:inputCheckedItem6Value,
+             CheckedItem7Value: inputCheckedItem7Value,
+             //AcceptMail: inputAcceptMail,
+             //gender: inputgender,
+             //titel: inputtitel,
+        }
+
+        var customerInput = new FastCheckInCustomerModel(customerData);
+
+        try {
+            localStorage.CustomerInput = JSON.stringify(customerInput);
+        }
+        catch (error)
+        {
+            alert('False Object');
+            alert(error);
+        }
+
+
+
+
+            if (flag == true) {
+                var link = localStorage.ConfigURL + "ESignature/GetSettings";
+                window.location.href = link;
+            }
+            else {
+                 alert("You have entered an invalid email address!")
+            }
+    }
+
+    $('#resettext').click(function () {
+        if (curSize != 16)
+            $('#content').css('font-size', 16);
+    });
+
+    $('#IncreaseFont_Clicked').click(function () {
+        curSize = parseInt($('#contentMainForm').css('font-size')) + 1;
+        if (curSize <= 16)
+            $('#contentMainForm').css('font-size', curSize);
+    });
+
+    $('#DecreaseFont_Clicked').click(function () {
+        curSize = parseInt($('#contentMainForm').css('font-size')) - 1;
+        if (curSize >= 14)
+            $('#contentMainForm').css('font-size', curSize);
+    });
+
+
+function ValidateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@@"]+(\.[^<>()\[\]\\.,;:\s@@"]+)*)|(".+"))@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
+
+
+    function setYesNoColor(yes, no, color) {
+
+        if (no == null) {
+        var property = document.getElementById(yes);
+            property.style.backgroundColor = color;
+            if (yes == "offersyes")
+                var property2 = document.getElementById("offersno");
+            else if (yes == "surveysyes")
+                var property2 = document.getElementById("surveysno");
+            else if (yes == "visityes")
+                 var property2 = document.getElementById("visitno");
+           else if (yes=="callyes")
+                var property2 = document.getElementById("callno");
+
+        property2.style.backgroundColor = "white";
+        }
+         if (yes == null ) {
+        var property = document.getElementById(no);
+             property.style.backgroundColor = color;
+             if(no=="offersno")
+                 var property2 = document.getElementById("offersyes");
+             else if (no == "surveysno")
+                 var property2 = document.getElementById("surveysyes");
+             else if (no == "visitno")
+                 var property2 = document.getElementById("visityes");
+             else if (no == "callno")
+                    var property2 = document.getElementById("callyes");
+
+        property2.style.backgroundColor = "white";
+
+         }
+    }
+
+
+
+function setColor(btn1,btn2,btn3, color){
+
+    if (btn2 == null && btn3 == null) {
+        var property = document.getElementById(btn1);
+        property.style.backgroundColor = color;
+        property.style.color = "gray";
+         var property2 = document.getElementById("Mrs");
+        property2.style.backgroundColor = "white";
+        var property3 = document.getElementById("Ms");
+        property3.style.backgroundColor = "white";
+    }
+
+    if (btn1 == null && btn3 == null) {
+         var property = document.getElementById(btn2);
+        property.style.backgroundColor = color;
+          property.style.color = "gray";
+
+        var property2 = document.getElementById("Mr");
+        property2.style.backgroundColor = "white";
+        var property3 = document.getElementById("Ms");
+        property3.style.backgroundColor = "white";
+    }
+
+        if (btn1 == null && btn2 == null) {
+        var property = document.getElementById(btn3);
+        property.style.backgroundColor = color;
+         property.style.color = "gray";
+        var property2 = document.getElementById("Mr");
+        property2.style.backgroundColor = "white";
+        var property3 = document.getElementById("Mrs");
+        property3.style.backgroundColor = "white";
+        }
+}
+
+</script>
+
+
+
+<style>
+
+
+    .privacystyling{
+        font-family:@privacy.fontFamily;
+    }
+
+    .entrystyling{
+     color:   @format.entryAttributes.textColor;
+    font-family: @format.entryAttributes.fontFamily;
+    }
+
+    .hiddenstyling {
+        visibility: hidden;
+        width: 0%;
+        height: 0px;
+        height: 0px;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    .labelstyling {
+        font-family: @format.labelAttributes.fontFamily;
+        color:@format.labelAttributes.textColor;
+    }
+
+    .headerstyling{
+        background-color:@format.headerAttributes.headerBackgroundColor;
+        font-size:@format.headerAttributes.headerFontSize;
+        font-weight:@format.headerAttributes.headerFontWeight;
+        color:@format.headerAttributes.headerFontColor;
+        font-family:@format.headerAttributes.headerfontFamily;
+    }
+
+    #inputFirstName:focus {
+        outline: none !important;
+        border: 1px solid gray;
+        box-shadow: 0 0 10px gray;
+    }
+
+    #inputLastName:focus {
+        outline: none !important;
+        border: 1px solid gray;
+        box-shadow: 0 0 10px gray;
+    }
+
+    .selection-button:hover {
+
+         cursor:pointer;
+           filter: brightness(85%);
+    }
+
+    select {
+    width: 7%;
+    margin: 0;
+    font-size: 100%;
+    padding: 5px 10px 5px 10px;
+    font-family: Segoe UI, Helvetica, sans-serif;
+    border: 0;
+    border: 1px solid #D0D0D0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    outline: none;
+    }
+
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html,
+    body {
+        background-color: #fff;
+        color: #555;
+        font-family: 'Lato', 'Arial', sans-serif;
+        font-weight: 300;
+        font-size: 16px;
+        text-rendering: optimizeLegibility;
+        overflow-x: hidden;
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    .container {
+        flex-direction: row;
+    }
+
+
+.btn--custom {
+    background-color: @format.sectionBackgroundColor;
+    color: #fff;
+}
+
+    .btn--custom::after {
+        background-color: @format.sectionBackgroundColor;
+    }
+
+    .input25 {
+        width:100%;
+    }
+
+    .input33{
+        width:100%;
+    }
+
+
+  .header-photo {
+    width: 100%;
+    margin: 0;
+    overflow: hidden;
+
+    background-color: @format.headerAttributes.headerBackgroundColor;
+}
+
+.header-photo img {
+    opacity: 0.9;
+    width: 25%;
+    height: 75%;
+    -webkit-transform: scale(1.15);
+    -ms-transform: scale(1.15);
+    transform: scale(1.15);
+    -webkit-transition: -webkit-transform 0.5s, opacity 0.5s;
+    transition: transform 0.5s, opacity 0.5s;
+}
+
+.header-photo img:hover {
+    opacity: 1;
+    -webkit-transform: scale(1.03);
+    -ms-transform: scale(1.03);
+    transform: scale(1.03);
+}
+
+.mrgnr{
+    margin-right:0px;
+}
+
+
+
+</style>
+
+
+

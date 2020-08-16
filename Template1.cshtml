@@ -1,0 +1,1125 @@
+﻿@using FastCheckInMVC.Controllers;
+@using FastCheckInModels.Models;
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var config = ViewBag.Config as SettingsModel;
+    var format = ViewBag.Format as globalAttributesModel;
+    var privacy = ViewBag.Privacy as PrivacyPolicyModel;
+}
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous">
+<script src="~/Resources/Scripts/QrBarcode.js"></script>
+<link rel="stylesheet" src="~/Resources/Scripts/QrBarcode.css">
+<script src="~/Resources/Scripts/iziToast.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="~/Resources/Scripts/iziToast.min.css">
+<link rel="stylesheet" type="text/css" href="~/Resources/Scripts/swalstyle.css" />
+<link rel="shortcut icon" href="">
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
+<div id="contactless" class="custom-flex-column  custom-flex-center " style="margin-top:150px; border:4px solid #ac9766; width:100%; height:900px;">
+
+    <div class="box custom-flex-row custom-flex-10 custom-flex-center" style="margin-top:-0.8rem; height:40%;margin-bottom:20px;border:2px medium #B8860B;">
+        <div class="imgBx">
+            <img class="imgstyle" src="~/Resources/image.png" style="border: 2px solid #B8860B;">
+            <h2 style="margin-right:14rem;margin-bottom:-12.5rem;background-color:#ac9766;  font-size:16px; ">Enjoy your stay </h2>
+        </div>
+    </div>
+    <div class="custom-flex-row custom-flex-10 custom-flex-center custom-full-width " style="background-color:#ac9766; text-shadow: -0.5px 0 gray, 0 0.5px gray, 0.5px 0 gray, 0 -0.5px gray;border: 2px solid gold;margin-top: 25px"> <h1>&nbsp;Contactless Fast Check-In </h1></div>
+    <div class="custom-flex-column custom-flex-10 custom-flex-center" style="margin-top:20px; background-color:#ac9766; border:1px solid #ac9766">
+        <div class=" custom-flex-100 custom-flex-start custom-full-width custom-flex-column" style="background-color:whitesmoke; margin-top:50px; width:400px;">
+            <h3 class="custom-flex-100  custom-flex-start labelstyling" style="align-self:start; " id="firstname">First name:</h3>
+            <h3 class="custom-flex-100   custom-flex-start labelstyling" style="align-self:start;" id="lastname">Last name:</h3>
+            <div id="qrcode" class=" custom-flex-center " style="        background-color: #ac9766;
+        margin-top: 25px !important;
+        margin-bottom: 15px;
+        border: 1px solid #B8860B;">
+            </div>
+            <div class="pulse " style="margin-top: 75px; margin-bottom:20px;">
+                <i class="fas fa-qrcode"> </i>
+            </div>
+        </div>
+    </div>
+    <div class="custom-flex-row custom-flex-5 custom-flex-start" style="        margin-top: 20px;
+        margin-bottom: 10px;">
+    </div>
+    <div class="custom-flex-row custom-flex-5 custom-flex-start">
+        <div class="custom-flex-row custom-flex-50 custom-flex-start">
+        </div>
+    </div>
+</div>
+
+<div id="contentMainForm" class="custom-full-height custom-flex-column custom-header" style="background-color: whitesmoke;" data-bind="with: LanguageHandler">
+    <div class="custom-flex-row custom-flex-10 custom-flex-center headerstyling" style="        margin-bottom: 10px;">  <figure> <img style="height:175px;" src="~/Resources/image.png" /> </figure></div>
+    <div class="custom-flex-row custom-flex-5 custom-flex-start" style="background-color:rgb(175,208,220);">
+        <div class="custom-flex-row custom-flex-5 custom-flex-start"></div>
+        <img src="~/Resources/image8.png" />
+        <div class="custom-flex-row custom-flex-5 custom-flex-start">
+        </div>
+        <div class="custom-flex-row custom-flex-50 custom-flex-start">
+            <label class="custom-flex-100 labelstyling " style="        margin-top: 4px;
+        font-size: 16px;
+        font-weight: bold;
+" data-bind="text: selectedDictionary() != null?selectedDictionary().Personal_Info:null">Personal Info</label>
+        </div>
+        <div class="custom-flex-row custom-flex-35 custom-flex-start">
+        </div>
+        <div class="custom-flex-row custom-flex-10 custom-flex-start">
+            <button class="selection-button" id="DecreaseFont_Clicked" style="        background-color: white;
+        height: 2.7rem;
+        text-align: center;">
+                A
+            </button>
+        </div>
+        <div class=" custom-flex-row custom-flex-10 custom-flex-start" style="margin-left: -17px;">
+            <button class="selection-button" id="IncreaseFont_Clicked" style="background-color:white; height:95%;">A</button>
+        </div>
+    </div>
+    <div class="custom-flex-row custom-flex-50 custom-flex-start" style="margin-top:10px;">
+    </div>
+    <div class="custom-flex-row custom-flex-5 custom-flex-start">
+        <div class="custom-flex-row custom-flex-9 custom-flex-start">
+        </div>
+        <label class="custom-flex-100 custom-flex-start labelstyling" data-bind="text: selectedDictionary() != null?selectedDictionary().ChooseTitle:null">Choose title</label>
+        <div class="custom-flex-row custom-flex-9 custom-flex-start">
+        </div>
+        <label class="custom-flex-100 custom-flex-start labelstyling" id="chooselang" data-bind="text: selectedDictionary() != null?selectedDictionary().ChooseLanguage:null">Choose language</label>
+    </div>
+    <div class="custom-flex-row custom-flex-17 custom-flex-start">
+        <div class="custom-flex-row custom-flex-6 custom-flex-center">
+        </div>
+        <div class="custom-flex-row custom-flex-61 custom-flex-start">
+            <button class="selection-button" id="Mr" style="        background-color: white;" onclick="setColor('Mr',null,null,'#add8e6')" ; data-bind="text: selectedDictionary() != null?selectedDictionary().MrTitle:null">Mr.</button>
+            <button class="selection-button" id="Mrs" style="background-color:white;" onclick="setColor(null,'Mrs',null,'#add8e6')" data-bind="text: selectedDictionary() != null?selectedDictionary().MrsTitle:null">Mrs.</button>
+            <button class="selection-button" id="Ms" style="background-color:white;" onclick="setColor(null,null,'Ms','#add8e6')" data-bind="text: selectedDictionary() != null?selectedDictionary().MsTitle:null">Ms.</button>
+        </div>
+        <div class="custom-flex-row custom-flex-80 custom-flex-center">
+            <div class="custom-flex-row custom-flex-8 custom-flex-start">
+            </div>
+            <select style="height:32px;align-self:center; font-size:14px;" class="custom-flex-76 custom-flex-end entrystyling" id="availableLanguages" data-bind="options: availableLanguages(), optionsText: 'Name', optionsValue: 'Code', value: SignalRHandler.customer() != null?SignalRHandler.customer().LanguageCode:'English', event: { change: GetSelectedLanguage.bind($data) }">
+            </select>
+        </div>
+    </div>
+    <div class="custom-flex-row custom-flex-50 custom-flex-start" style="margin-top:10px;">
+    </div>
+    <div class="custom-flex-row custom-flex-5 custom-flex-start">
+        <div class="custom-flex-row custom-flex-9 custom-flex-start">
+        </div>
+        <label class="custom-flex-100 custom-flex-start labelstyling" data-bind="text: selectedDictionary() != null?selectedDictionary().FirstName+'*':null">First name</label>
+        <div class="custom-flex-row custom-flex-9 custom-flex-start">
+        </div>
+        <label class="custom-flex-100 custom-flex-start labelstyling" data-bind="text: selectedDictionary() != null?selectedDictionary().LastName+'*':null">
+            Last name
+        </label>
+    </div>
+    <div class="custom-flex-5 custom-flex-center" style="background-color:whitesmoke;">
+        <div class="custom-flex-50 custom-flex-center">
+            <input class="custom-flex-83 custom-flex-start custom-full-width entrystyling" style="background-color:lightgray;text-align:left;" id="inputFirstName" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().FirstName:null" readonly />
+        </div>
+        <div class="custom-flex-50 custom-flex-center">
+            <input class="custom-flex-83 custom-flex-center entrystyling " style="background-color:lightgray;text-align:left;" id="inputLastName" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().LastName:null" readonly />
+        </div>
+    </div>
+    <div class="custom-flex-row custom-flex-50 custom-flex-start" style="margin-top:10px;">
+    </div>
+    <div class="custom-flex-row custom-flex-5 custom-flex-start">
+        <div class="custom-flex-row custom-flex-5"></div>
+        <div class="custom-flex-row custom-flex-62">
+            <label class="custom-flex-100 custom-flex-start labelstyling" data-bind="text: selectedDictionary() != null?selectedDictionary().DateOfBirth:null">Date of birth</label>
+        </div>
+        <div class="custom-flex-row custom-flex-1"></div>
+        <div class="custom-flex-row custom-flex-57">
+            <label class="custom-flex-100 custom-flex-start labelstyling" data-bind="text: selectedDictionary() != null?selectedDictionary().Departure:null">Departure date</label>
+        </div>
+    </div>
+    <div class="custom-flex-row custom-flex-5 custom-flex-start custom-full-width">
+        <div class="custom-flex-row custom-flex-4"></div>
+        <select id="dobday" class="custom-flex-start entrystyling" style="width:13.5%; height:32px;align-self:center;font-size:14px;"></select>
+        <select id="dobmonth" class="custom-quarter-width entrystyling" style="width:14%;height:32px;align-self:center;font-size:14px;" disabled></select>
+        <select id="dobyear" class="custom-quarter-width entrystyling" style="width:14.1%;height:32px;align-self:center;font-size:14px;" disabled></select>
+        <div class="custom-flex-row custom-flex-9 " style="margin-left:4px;height:32px;align-self:center;font-size:14px;" disabled></div>
+        <select id="depaday" class="entrystyling" style="width:13.5%;height:32px;align-self:start;margin-left:-8px;font-size:14px;" disabled></select>
+        <select id="depmonth" class="entrystyling" style="width:14%;height:32px;align-self:center;font-size:14px;" disabled></select>
+        <select id="depyear" class="entrystyling" style="width:14.1%;height:32px;align-self:center;font-size:14px;" disabled></select>
+    </div>
+    <div class="custom-flex-row custom-flex-50 custom-flex-start" style="margin-top:20px;">
+    </div>
+    <div class="custom-flex-row custom-flex-5 custom-flex-start"></div>
+    <div class="custom-flex-row custom-flex-5 custom-flex-start" style="background-color:rgb(175,208,220);">
+        <div class="custom-flex-row custom-flex-5 custom-flex-start"></div>
+        <img src="~/Resources/image7.png" />
+        <div class="custom-flex-row custom-flex-5 custom-flex-start">
+        </div>
+        <div class="custom-flex-row custom-flex-50 custom-flex-start">
+            <label id="cntcdetails" class="custom-flex-100 labelstyling" style="margin-top:4px;font-size:16px; font-weight:bold" data-bind="text: selectedDictionary() != null?selectedDictionary().ContactDetails:null">  Contact Details</label>
+        </div>
+        <div class="custom-flex-row custom-flex-70 custom-flex-start">
+        </div>
+        <div class="custom-flex-row custom-flex-3 custom-flex-start">
+        </div>
+        <div class=" custom-flex-row custom-flex-3 custom-flex-start">
+        </div>
+    </div>
+    <div class="custom-flex-row custom-flex-2 custom-flex-start">
+    </div>
+    <div class="custom-flex-row custom-flex-50 custom-flex-start" style="margin-top:10px;">
+    </div>
+    <div class="custom-flex-row custom-flex-5 custom-flex-start">
+        <div class="custom-flex-row custom-flex-4 custom-flex-start">
+        </div>
+        <div class="custom-flex-row custom-flex-67 custom-flex-start">
+            <label class="custom-flex-100 custom-flex-start labelstyling" data-bind="text: selectedDictionary() != null?selectedDictionary().Email:null">Email Address</label>
+        </div>
+        <div class="custom-flex-row custom-flex-37 custom-flex-start">
+            <label class="custom-flex-100 custom-flex-start labelstyling" style="overflow:hidden" data-bind="html: selectedDictionary() != null?selectedDictionary().Mobile:null">
+                Mobile
+            </label>
+        </div>
+    </div>
+    <div class="custom-flex-5 custom-flex-center" style="background-color:whitesmoke;">
+        <div class="custom-flex-68 custom-flex-center">
+            <input class="custom-flex-87 custom-flex-start custom-full-width entrystyling " placeholder="e.g name@email.com" style="text-align:left;" id="inputEmail" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().Email:null" />
+        </div>
+        <div class="custom-flex-row custom-flex-8 custom-flex-start" style="background-color:whitesmoke;">
+        </div>
+        <div class="custom-flex-50 custom-flex-center">
+            <input class="custom-flex-75 custom-flex-end custom-full-width entrystyling" style="text-align:left;" id="inputMobile" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().Mobile:null" />
+        </div>
+    </div>
+    <div class="custom-flex-row custom-flex-50 custom-flex-start" style="margin-top:10px;">
+    </div>
+    <div class="custom-flex-row custom-flex-5 custom-flex-start">
+        <div class="custom-flex-row custom-flex-4 custom-flex-start">
+        </div>
+        <div class="custom-flex-row custom-flex-67 custom-flex-start">
+            <label class="custom-flex-100 custom-flex-start labelstyling" data-bind="text: selectedDictionary() != null?selectedDictionary().Street:null">Home Address</label>
+        </div>
+        <div class="custom-flex-row custom-flex-37 custom-flex-start">
+            <label class="custom-flex-100 custom-flex-start labelstyling" data-bind="html: selectedDictionary() != null?selectedDictionary().ZipCode:null">
+                Zip Code
+            </label>
+        </div>
+    </div>
+    <div class="custom-flex-5 custom-flex-center" style="background-color:whitesmoke;">
+        <div class="custom-flex-68 custom-flex-center">
+            <input class="custom-flex-87 custom-flex-start custom-full-width entrystyling " style="text-align:left;" id="inputStreetAddress" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().Street:null" />
+        </div>
+        <div class="custom-flex-row custom-flex-8 custom-flex-start" style="background-color:whitesmoke;">
+        </div>
+        <div class="custom-flex-50 custom-flex-center">
+            <input class="custom-flex-75 custom-flex-end custom-full-width entrystyling" style="text-align:left;" id="inputZipcode" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().ZipCode:null" />
+        </div>
+    </div>
+    <div class="custom-flex-row custom-flex-50 custom-flex-start" style="margin-top:10px;">
+    </div>
+    <div class="custom-flex-row custom-flex-5 custom-flex-start">
+        <div class="custom-flex-row custom-flex-4 custom-flex-start">
+        </div>
+        <div class="custom-flex-row custom-flex-67 custom-flex-start">
+            <label class="custom-flex-100 custom-flex-start labelstyling" data-bind="text: selectedDictionary() != null?selectedDictionary().City:null">Home Address</label>
+        </div>
+        <div class="custom-flex-row custom-flex-37 custom-flex-start">
+            <label class="custom-flex-100 custom-flex-start labelstyling" data-bind="html: selectedDictionary() != null?selectedDictionary().Country:null">
+                Country
+            </label>
+        </div>
+    </div>
+    <div class="custom-flex-5 custom-flex-center" style="background-color:whitesmoke;">
+        <div class="custom-flex-row custom-flex-4 custom-flex-start" style="background-color:whitesmoke;">
+        </div>
+        <div class="custom-flex-55 custom-flex-star">
+            <input class="custom-flex-89 custom-flex-start  entrystyling " style="text-align:left;" id="inputCity" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().City:null" />
+        </div>
+        <div class="custom-flex-row custom-flex-4 custom-flex-start" style="background-color:whitesmoke;">
+        </div>
+        <div class="custom-flex-41 custom-flex-center">
+            <select class="custom-flex-76 custom-flex-center entrystyling" style="background-color:white;height:32px;font-size:14px; width:75%;" id="inputCountry" placeholder="Select" data-bind="options: ResourceHandler.nationalities(), optionsText: 'NatCode', optionsValue: 'NatId',value: SignalRHandler.customer() != null?SignalRHandler.customer().Nationality:88, event: { change: GetSelectedLanguage.bind($data) }">
+            </select>
+        </div>
+    </div>
+    <div class="custom-flex-row custom-flex-5 custom-flex-start">
+    </div>
+    <input style="visibility: hidden;width:0%;text-align:left;" id="inputRoom" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().Room:null" />
+    <div class="custom-flex-row custom-flex-5 custom-flex-start" style="background-color:whitesmoke;">
+        <div class="custom-flex-row custom-flex-4"></div>
+        <div class="custom-flex-row custom-flex-72">
+            <p class="custom-flex-100 custom-flex-start privacystyling" data-bind="text: selectedDictionary() != null?selectedDictionary().Calls:null">Will you accept any calls during your stay? *</p>
+        </div>
+        <div class="custom-flex-row custom-flex-20">
+            <button class="custom-flex-50  selection-button custom-flex-center " style="text-align:center;background-color:white;height:40px; " id="callyes" onclick="setYesNoColor('callyes',null, '#add8e6')" data-bind="text: selectedDictionary() != null?selectedDictionary().YesBtns:null">Yes</button>
+            <button class="custom-flex-50  selection-button custom-flex-center" style="text-align:center;background-color:white;height:40px;" id="callno" onclick="setYesNoColor(null,'callno', '#add8e6')" data-bind="text: selectedDictionary() != null?selectedDictionary().NoBtns:null">No</button>
+        </div>
+    </div>
+    <div class="custom-flex-row custom-flex-1 custom-flex-start" style="margin-top:10px;background-color:white;">
+    </div>
+    <div class="custom-flex-row custom-flex-5 custom-flex-start" style="background-color:whitesmoke;">
+        <div class="custom-flex-row custom-flex-4"></div>
+        <div class="custom-flex-row custom-flex-70">
+            <p class="custom-flex-100 custom-flex-start privacystyling " data-bind="text: selectedDictionary() != null?selectedDictionary().Visits:null">Have you visited our hotel before?</p>
+        </div>
+        <div class="custom-flex-row custom-flex-2"></div>
+        <div class="custom-flex-row custom-flex-20">
+            <button class="custom-flex-50  selection-button custom-flex-center " style="text-align:center;background-color:white; height:40px;" id="visityes" onclick="setYesNoColor('visityes',null, '#add8e6')" data-bind="text: selectedDictionary() != null?selectedDictionary().YesBtns:null">Yes</button>
+            <button class="custom-flex-50  selection-button custom-flex-center" style="text-align:center;background-color:white;height:40px;" id="visitno" onclick="setYesNoColor(null,'visitno', '#add8e6')" data-bind="text: selectedDictionary() != null?selectedDictionary().NoBtns:null">No</button>
+        </div>
+    </div>
+    <div class="custom-flex-row custom-flex-1 custom-flex-start" style="margin-top:20px;">
+    </div>
+    <div id="privacypolicydiv" class="custom-flex-row custom-flex-100 custom-flex-start" style="background-color:whitesmoke;">
+        <div class="custom-flex-row custom-flex-4 custom-flex-start" style="background-color:whitesmoke;">
+        </div>
+        <p class="custom-flex-90  privacystyling" style="text-align:start;" data-bind="text: selectedDictionary() != null?selectedDictionary().privacyPolicyDescription:null">
+            I have read the Privacy  Notice to guests made by Atlantica Hotel Management Ltd
+            (Atlantica) on www.atlanticahotels.com and/or  in the information booklet in my room.  I
+            hereby consent for Atlantica to use my personal data mentioned in the present  registration form
+            for the purposes of:
+        </p>
+    </div>
+    <div class="custom-flex-row custom-flex-3 custom-flex-start" style="background-color:white; margin-top:10px; height:5px;">
+    </div>
+    <div class="custom-flex-row custom-flex-5 custom-flex-start" style="background-color: whitesmoke;">
+        <div class="custom-flex-row custom-flex-5">
+        </div>
+    </div>
+
+    <div id="checkalladsid" class="custom-flex-row custom-flex-5 custom-flex-start" style="   background-color: whitesmoke;">
+        <div class="custom-flex-row custom-flex-4"></div>
+        <div class="custom-flex-row custom-flex-70 privacystyling" id="atxt" style="overflow:visible" data-bind="html: selectedDictionary() != null?selectedDictionary().aText:null">
+        </div>
+        <div class="custom-flex-row custom-flex-2"></div>
+        <div class="custom-flex-row custom-flex-20" style="overflow:hidden;" id="btndivo">
+            <button class="custom-flex-50  selection-button custom-flex-center " id="offersyes" style=" text-align: center;
+        background-color: white;
+        height: 40px;" onclick="setYesNoColor('offersyes',null, '#add8e6')" data-bind="text: selectedDictionary() != null?selectedDictionary().YesBtns:null">
+                Yes
+            </button>
+            <button class="custom-flex-50  selection-button custom-flex-center" id="offersno" style="        text-align: center;
+        background-color: white;
+        height: 40px;
+        " onclick="setYesNoColor(null, 'offersno', '#add8e6')" data-bind="text: selectedDictionary() != null?selectedDictionary().NoBtns:null">
+                No
+            </button>
+        </div>
+    </div>
+
+    <div class="custom-flex-row custom-flex-3 custom-flex-start" style="background-color: white; margin-top: 10px; height: 5px;">
+    </div>
+
+    <div id="surveysdiv" class="custom-flex-row custom-flex-100 custom-flex-start" style="background-color: whitesmoke;">
+        <div class="custom-flex-row custom-flex-4 custom-flex-start" style="        background-color: whitesmoke;">
+        </div>
+        <p class="custom-flex-69 privacystyling " style="text-align:start;" data-bind="text: selectedDictionary() != null?selectedDictionary().bText:null">
+            b) performing market research via surveys to better serve my needs*
+        </p>
+        <div class="custom-flex-row custom-flex-3"></div>
+        <div class="custom-flex-row custom-flex-20">
+            <button class="custom-flex-50  selection-button custom-flex-center " style="text-align:center;background-color:white;height:40px; " id="surveysyes" onclick="setYesNoColor('surveysyes',null, '#add8e6')" data-bind="text: selectedDictionary() != null?selectedDictionary().YesBtns:null">Yes</button>
+            <button class="custom-flex-50  selection-button custom-flex-center" style="text-align:center;background-color:white;height:40px;" id="surveysno" onclick="setYesNoColor(null,'surveysno', '#add8e6')" data-bind="text: selectedDictionary() != null?selectedDictionary().NoBtns:null">No</button>
+        </div>
+    </div>
+    <div class="custom-flex-row custom-flex-50 custom-flex-start" style="margin-top:30px; " id="div1">
+    </div>
+    <div class="custom-flex-5 custom-flex-start" style="background-color:whitesmoke; margin-top:-1rem;" id="div2">
+        <div class="custom-flex-row custom-flex-25"></div>
+        <a class=" btn btn-full custom-flex-50 custom-full-width custom-flex-center " id="signbtn" href="#" style="font-size:2.4rem;font-weight:200;" onclick="placeSignatureBtn()" data-bind="text: selectedDictionary() != null?selectedDictionary().	SignatureBtnTxt:null"> Place Your Signature</a>
+    </div>
+    @*Hidden Fields*@
+    <div class="custom-flex-5" style="visibility:hidden; height:0;width:0px; margin:0; border:1px solid black;" id="hiddendiv">
+        <input id="inputDeparture" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().Departure:null" />
+        <input id="inputBirthday" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().DateOfBirth:null" />
+        <input id="inputPassportNo" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().Passport:null" />
+        <input id="inputAcceptEmails" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().inputAcceptEmails:null" />
+        <input id="inputMemberId" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().MemberId:null" />
+        <input id="inputCompany" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().Company:null" />
+        <input id="inputCountryId" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().CountryId:null" />
+        <input id="inputCheckAllAds" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().CheckAllAds:null" />
+        <input id="inputCreditCard" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().CreditCard:null" />
+        <input id="inputPhone" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().Phone:null" />
+        <input id="inputNationality" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().Nationality:null" />
+        <input id="inputMethodOfPayment" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().MethodOfPayment:null" />
+        <input id="inputLanguageId" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().LanguageId:null" />
+        <input id="inputLanguageCode" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().LanguageCode:null" />
+        <input id="inputSignature" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().Signature:null" />
+        <input id="inputUser" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().User:null" />
+        <input id="inputTimestamp" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().timestamp:null" />
+        <input id="inputShowPrice" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().ShowPrice:null" />
+        <input id="inputPrice" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().Price:null" />
+        <input id="inputIInvoice" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().IsInvoice:null" />
+        <input id="inputSendTextMessageValue" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().SendTextMessageValue:null" />
+        <input id="inputAfm" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().Afm:null" />
+        <input id="inputAcceptanceText" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().AcceptanceText:null" />
+        <input id="inputSignalRId" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().SignalRId:null" />
+        <input id="inputInvoiceAfm" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().InvoiceAfm:null" />
+        <input id="inputInvoiceCompany" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().InvoiceCompany:null" />
+        <input id="inputInvoiceOccupation" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().InvoiceOccupation:null" />
+        <input id="inputInvoiceCity" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().InvoiceCity:null" />
+        <input id="inputInvoiceStreet" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().InvoiceStreet:null" />
+        <input id="inputInvoiceZipCode" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().InvoiceZipCode:null" />
+        <input id="inputInvoiceCountry" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().InvoiceCountry:null" />
+        <input id="inputStatus" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().Status:null" />
+        <input id="inputCheckedItem1Value" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().CheckedItem1Value:null" />
+        <input id="inputCheckedItem2Value" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().CheckedItem2Value:null" />
+        <input id="inputCheckedItem3Value" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().CheckedItem3Value:null" />
+        <input id="inputCheckedItem4Value" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().CheckedItem4Value:null" />
+        <input id="inputCheckedItem5Value" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().CheckedItem5Value:null" />
+        <input id="inputCheckedItem6Value" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().CheckedItem6Value:null" />
+        <input id="inputCheckedItem7Value" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().CheckedItem7Value:null" />
+        <input id="inputAcceptMail" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().AcceptMail:null" />
+        <input id="inputgender" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().gender:null" />
+        <input id="inputtitel" class="hiddenstyling" data-bind="value: SignalRHandler.customer() != null?SignalRHandler.customer().titel:null" />
+    </div>
+
+</div>
+
+
+
+<script src="~/Scripts/Jspdf/html2pdf.bundle.min.js"></script>
+
+<script type="text/javascript">
+    var qrflag = 0;
+    $('#contentMainForm').show();
+    $('#contactless').hide();
+    var myhtml = document.getElementById("contentMainForm");
+    var xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+        const ele = document.getElementById("contentMainForm");
+    };
+
+    localStorage.removeItem('f2');
+    localStorage.removeItem('lname');
+    localStorage.removeItem('resno');
+
+    function savehtml() {
+
+        const ele = document.getElementById("contentMainForm");
+        const url = '@ViewBag.config.url' + 'api/Sign/PostFirstPageHtml';
+       html2pdf().from(ele).toPdf().output('datauristring').then(function (pdfAsString) {
+           const url = '@ViewBag.config.url' + 'api/Sign/PostFirstPageHtml';
+           
+           const jsonString = JSON.stringify(SignalRHandler.customer().ReservationNo + "#" + pdfAsString );
+
+           localStorage.setItem('f1') = pdfAsString;
+        });
+
+    }
+
+    $(document).ready(function () {
+
+
+        LanguageHandler.SetApi("@ViewBag.config.url");
+        LanguageHandler.GetTranslations();
+        if (localStorage.GlobalLanguageCode) {
+            LanguageHandler.ChangeLanguage(localStorage.GlobalLanguageCode);
+        }
+
+        ResourceHandler.SetApi("@ViewBag.config.url");
+        ResourceHandler.InitializeResources();
+        SignalRHandler.SetApi("@ViewBag.config.url");
+        SignalRHandler.Connect("@ViewBag.config.grpname");
+
+        if (SignalRHandler.customer() !=null)
+        SignalRHandler.customer() = null;
+
+        localStorage.ConfigURL = "@ViewBag.config.url";
+        localStorage.ConfigGroupName = "@ViewBag.config.grpname";
+        localStorage.ConfigHotelName = "@ViewBag.config.hotelname";
+
+        var changeLanguageAuto = ko.computed(function () {
+            if (SignalRHandler.customer() != null) {
+                LanguageHandler.ChangeLanguage(SignalRHandler.customer().LanguageCode);
+                localStorage.GlobalLanguageCode = SignalRHandler.customer().LanguageCode;
+
+
+                if (SignalRHandler.customer().mode == 2) {
+                    $('#contentMainForm').hide();
+                    $('#contactless').show();
+                    qrfetchsucess()
+
+                    var fname = document.getElementById('firstname');
+                    var lname = document.getElementById('lastname');
+                    var fnamedisplayed = SignalRHandler.customer().FirstName;
+                    var lnamedisplayed = SignalRHandler.customer().LastName;
+                    fnamedisplayed = fnamedisplayed[0] + fnamedisplayed[1] + fnamedisplayed.slice(2).replace(/.(?!$)/g, '*')
+                    lnamedisplayed = lnamedisplayed[0] + lnamedisplayed[1] + lnamedisplayed.slice(2).replace(/.(?!$)/g, '*')
+                    fname.textContent = "   Firstname : " + fnamedisplayed;
+                    lname.textContent = "   Lastname :" + lnamedisplayed;
+
+
+                                if (!qrflag) {
+                                                InfoMessage();
+                                                myqrcode = document.getElementById('qrcode');
+                                                new QRCode(document.getElementById("qrcode"), {
+                                                    text: "@ViewBag.config.url" + "/FC/GetSettings?url=" + "@ViewBag.config.url" + "&group=" + SignalRHandler.customer().string1,
+                                                    width: 150,
+                                                    height: 150,
+                                                });
+                                                qrflag = 1;
+                                }
+                }
+                else if (SignalRHandler.customer().mode == 0) {
+                    $('#contentMainForm').show();
+                    $('#contactless').hide();
+
+                }
+
+                localStorage.resno = SignalRHandler.customer().ReservationNo;
+                localStorage.lname = SignalRHandler.customer().LastName;
+
+                var property1 = document.getElementById("Mr");
+                property1.style.backgroundColor = "white";
+                var property2 = document.getElementById("Mrs");
+                property2.style.backgroundColor = "white";
+                var property3 = document.getElementById("Ms");
+                property3.style.backgroundColor = "white";
+
+                if (SignalRHandler.customer().titel == "Mr")
+                    property1.style.backgroundColor = "rgb(173, 216, 230)";
+                else if (SignalRHandler.customer().titel == "Mrs")
+                    property2.style.backgroundColor = "rgb(173, 216, 230)";
+                else if (SignalRHandler.customer().titel == "Ms")
+                    property3.style.backgroundColor = "rgb(173, 216, 230)";
+
+                var property4 = document.getElementById("surveysyes");
+                property4.style.backgroundColor = "white";
+
+                var property5 = document.getElementById("visityes");
+                property5.style.backgroundColor = "white";
+
+                var property6 = document.getElementById("offersyes");
+                property6.style.backgroundColor = "white"
+
+                var property7 = document.getElementById("callyes");
+                property7.style.backgroundColor = "white";
+
+                var property8 = document.getElementById("surveysno");
+                property8.style.backgroundColor = "white";
+
+                var property9 = document.getElementById("visitno");
+                property9.style.backgroundColor = "white";
+
+                var property10 = document.getElementById("offersno");
+                property10.style.backgroundColor = "white"
+                var property11 = document.getElementById("callno");
+                property11.style.backgroundColor = "white";
+
+                if (SignalRHandler.customer().SendPhoneValue == true)
+                    property7.style.backgroundColor = "rgb(173, 216, 230)";
+                else
+                    property11.style.backgroundColor = "rgb(173, 216, 230)";
+
+                if (SignalRHandler.customer().SendTextMessageValue == true)
+                    property5.style.backgroundColor = "rgb(173, 216, 230)";
+                else
+                    property9.style.backgroundColor = "rgb(173, 216, 230)";
+
+
+                if (SignalRHandler.customer() != null) {
+                if (SignalRHandler.customer().CheckedItem1Value == true) {
+                  var  surveysdiv = document.getElementById("surveysdiv");
+                    surveysdiv.style.visibility = "hidden";
+                    surveysdiv.value = true;
+
+                    property4.style.backgroundColor =  "rgb(173, 216, 230)";
+                }
+                else {
+                    property4.style.backgroundColor = "white";
+                }
+
+                if (SignalRHandler.customer().CheckAllAds == true) {
+                    var chckalladsdiv = document.getElementById('checkalladsid');
+                    chckalladsdiv.style.visibility = "hidden";
+                    chckalladsdiv.value = true;
+                }
+                else {
+                    property10.style.backgroundColor = "white";
+                     var chckalladsdiv = document.getElementById('checkalladsid');
+                    chckalladsdiv.style.visibility = "visible";
+                    }
+                }
+
+                if (surveysdiv != undefined && chckalladsdiv !=undefined && surveysdiv.style.visibility == "hidden" && chckalladsdiv.style.visibility == "hidden")
+                {
+                    var privacypolicydiv = document.getElementById("privacypolicydiv");
+                    privacypolicydiv.style.visibility = "hidden";
+                    }
+
+               var dep = document.getElementById("inputDeparture");
+               var dob =document.getElementById("inputBirthday");
+                var departuredate = dep.value;
+                var birthdaydate = dob.value;
+
+                var depdaysplits = departuredate.split("-", 3);
+                var year = depdaysplits[0];
+                var month = depdaysplits[1];
+                var day = depdaysplits[2].split("T", 2);
+
+                var depaday = document.getElementById("depaday");
+                var depmonth=document.getElementById("depmonth");
+                var depyear = document.getElementById("depyear");
+
+                var dayoption = document.createElement("option");
+                var monthoption = document.createElement("option");
+                var yearoption = document.createElement("option");
+
+                dayoption.text = day[0];
+                monthoption.text = month;
+                yearoption.text = year;
+
+                if (depaday != undefined)
+                depaday.add(dayoption);
+                depmonth.add(monthoption);
+                depyear.add(yearoption);
+
+                var birthdaydate = dob.value;
+                var dobdaysplits = birthdaydate.split("-", 3);
+                 var dbyear = dobdaysplits[0];
+                var dbmonth = dobdaysplits[1];
+                if (dobdaysplits != "")
+                var dbday = dobdaysplits[2].split("T", 2);
+
+                 var dobday=document.getElementById("dobday");
+                var dobmonth=document.getElementById("dobmonth");
+                var dobyear = document.getElementById("dobyear");
+
+                 var dbdayoption = document.createElement("option");
+                 var dbmonthoption = document.createElement("option");
+                 var dbyearoption = document.createElement("option");
+
+                if (dbday!=undefined)
+                dbdayoption.text = dbday[0];
+                dbmonthoption.text = dbmonth;
+                dbyearoption.text = dbyear;
+
+                dobday.add(dbdayoption);
+                dobmonth.add(dbmonthoption);
+                dobyear.add(dbyearoption);
+            }
+        });
+    });
+
+    function GetSelectedLanguage(lang) {
+        var e = document.getElementById("availableLanguages");
+        var selectedLng = e.options[e.selectedIndex].value;
+        LanguageHandler.ChangeLanguage(selectedLng);
+        localStorage.GlobalLanguageCode = selectedLng;
+    }
+
+    function placeSignatureBtn() {
+
+        var inputFirstName = document.getElementById('inputFirstName').value;
+        var inputLastName = document.getElementById('inputLastName').value;
+        var inputPassportNo = document.getElementById('inputPassportNo').value;
+        var inputStreetAddress = document.getElementById('inputStreetAddress').value;
+        var inputZipcode = document.getElementById('inputZipcode').value;
+        var inputCity = document.getElementById('inputCity').value;
+        var inputCountry = document.getElementById('inputCountry').value;
+        var inputEmail = document.getElementById('inputEmail').value;
+        var inputMobile = document.getElementById('inputMobile').value;
+        var inputRoom = document.getElementById('inputRoom').value;
+        var inputBirthday = document.getElementById('inputBirthday').value;
+        var inputAcceptEmails = document.getElementById('inputAcceptEmails').value;
+
+            //hidden fields
+           var inputMemberId = document.getElementById('inputMemberId').value;
+           var inputCompany = document.getElementById('inputCompany').value;
+           var inputCountryId = document.getElementById('inputCountryId').value;
+           var inputCreditCard = document.getElementById('inputCreditCard').value;
+           var inputPhone = document.getElementById('inputPhone').value;
+           var inputNationality = document.getElementById('inputNationality').value;
+           var inputMethodOfPayment = document.getElementById('inputMethodOfPayment').value;
+           var inputLanguageId = document.getElementById('inputLanguageId').value;
+           var inputLanguageCode = document.getElementById('inputLanguageCode').value;
+           var inputSignature = document.getElementById('inputSignature').value;
+           var inputUser = document.getElementById('inputUser').value;
+           var inputTimestamp = document.getElementById('inputTimestamp').value;
+
+           var inputShowPrice = document.getElementById('inputShowPrice').value;
+           var inputPrice = document.getElementById('inputPrice').value;
+           var inputIInvoice = document.getElementById('inputIInvoice').value;
+           var inputSendTextMessageValue = document.getElementById('inputSendTextMessageValue').value;
+           var inputAfm = document.getElementById('inputAfm').value;
+           var inputAcceptanceText = document.getElementById('inputAcceptanceText').value;
+           var inputSignalRId = document.getElementById('inputSignalRId').value;
+           var inputInvoiceAfm = document.getElementById('inputInvoiceAfm').value;
+           var inputInvoiceCompany = document.getElementById('inputInvoiceCompany').value;
+           var inputInvoiceOccupation = document.getElementById('inputInvoiceOccupation').value;
+           var inputInvoiceCity = document.getElementById('inputInvoiceCity').value;
+           var inputInvoiceStreet = document.getElementById('inputInvoiceStreet').value;
+           var inputInvoiceZipCode = document.getElementById('inputInvoiceZipCode').value;
+           var inputInvoiceCountry = document.getElementById('inputInvoiceCountry').value;
+           var inputStatus = document.getElementById('inputStatus').value;
+           var inputCheckedItem1Value = document.getElementById('inputCheckedItem1Value').value;
+           var inputCheckedItem2Value = document.getElementById('inputCheckedItem2Value').value;
+           var inputCheckedItem3Value = document.getElementById('inputCheckedItem3Value').value;
+           var inputCheckedItem4Value = document.getElementById('inputCheckedItem4Value').value;
+           var inputCheckedItem5Value = document.getElementById('inputCheckedItem5Value').value;
+           var inputCheckedItem6Value = document.getElementById('inputCheckedItem6Value').value;
+           var inputCheckedItem7Value = document.getElementById('inputCheckedItem7Value').value;
+           var inputAcceptMail = document.getElementById('inputAcceptMail').value;
+           var inputgender = document.getElementById('inputgender').value;
+            var inputtitel = document.getElementById('inputtitel').value;
+
+            var checkallads = false;
+            var sendphone = false;
+            var surveysyes = false;
+            var checkvisit = false;
+            var title = "";
+
+                var property1 = document.getElementById("Mr");
+            if (property1.style.backgroundColor == "rgb(173, 216, 230)")
+                title = "Mr";
+
+                var property2 = document.getElementById("Mrs");
+            if (property2.style.backgroundColor == "rgb(173, 216, 230)")
+                title = "Mrs";
+
+                var property3 = document.getElementById("Ms");
+            if (property3.style.backgroundColor == "rgb(173, 216, 230)")
+                     title = "Ms";
+
+
+               var property4 = document.getElementById("surveysyes");
+            if (property4.style.backgroundColor == "rgb(173, 216, 230)")
+                surveysyes = true;
+               var property8 = document.getElementById("surveysno");
+            if (property8.style.backgroundColor == "rgb(173, 216, 230)")
+                surveysyes = false;
+
+
+
+
+                var property5 = document.getElementById("visityes");
+            if (property5.style.backgroundColor == "rgb(173, 216, 230)")
+                checkvisit = true
+
+                var property9 = document.getElementById("visitno");
+            if (property9.style.backgroundColor == "rgb(173, 216, 230)")
+                checkvisit = false;
+
+              var  surveysdiv = document.getElementById("surveysdiv");
+
+        if (SignalRHandler.customer() != null) {
+            if (surveysdiv.style.visibility = "hidden")
+                surveysyes = SignalRHandler.customer().CheckedItem1Value;
+        }
+
+                var property6 = document.getElementById("offersyes");
+            if (property6.style.backgroundColor == "rgb(173, 216, 230)")
+                checkallads = true;
+
+            var property10 = document.getElementById("offersno");
+            if (property10.style.backgroundColor == "rgb(173, 216, 230)")
+                checkallads = false;
+
+
+                var property7 = document.getElementById("callyes");
+            if (property7.style.backgroundColor == "rgb(173, 216, 230)")
+                sendphone = true;
+
+                var property11 = document.getElementById("callno");
+            if (property11.style.backgroundColor == "rgb(173, 216, 230)")
+                sendphone = false;
+
+
+          var property6 = document.getElementById("offersyes");
+            if (property6.style.backgroundColor == "rgb(173, 216, 230)")
+                checkallads = true;
+
+            inputtitel = title;
+            localStorage.CheckAllAds = checkallads;
+            localStorage.SendPhoneValue = sendphone;
+
+            var chckallads = document.getElementById('inputCheckAllAds');
+
+            if (chckallads.value == "true" && checkallads == false)
+            checkallads = true;
+
+            var flag = ValidateEmail(inputEmail);
+            if (inputEmail == "")
+                flag = true;
+
+            var customerData = {
+            FirstName: inputFirstName,
+            LastName: inputLastName,
+           Passport: inputPassportNo,
+            Street: inputStreetAddress,
+            ZipCode: inputZipcode,
+            City: inputCity,
+            Country: inputCountry,
+            Email: inputEmail,
+            ClientName:"",
+            Mobile: inputMobile,
+            Room: inputRoom,
+            SendEmailValue: inputAcceptEmails,
+            CheckAllAds:checkallads,
+            SendLetterValue:false,
+            SendPhoneValue: sendphone,
+            DateOfBirth:inputBirthday,
+            ReservationNo: SignalRHandler.customer().ReservationNo,
+            Arrival: SignalRHandler.customer().Arrival,
+            Departure: SignalRHandler.customer().Departure,
+            MemberId:inputMemberId,
+            Company:inputCompany,
+            CountryId: inputCountryId,
+            Phone: inputPhone,
+            CreditCard: inputCreditCard,
+            Nationality: inputNationality,
+            MethodOfPayment: inputMethodOfPayment,
+            LanguageId: inputLanguageId,
+            LanguageCode: inputLanguageCode,
+            Signature: inputSignature,
+            User: inputUser,
+            timestamp: inputTimestamp,
+            ShowPrice: inputShowPrice,
+            Price: inputPrice,
+             Invoice: inputIInvoice,
+             Afm: inputAfm,
+             AcceptanceText: inputAcceptanceText,
+             SignalRId: inputSignalRId,
+             InvoiceAfm: inputInvoiceAfm,
+             InvoiceCompany: inputInvoiceCompany,
+             InvoiceOccupation: inputInvoiceOccupation,
+             InvoiceCity: inputInvoiceCity,
+             InvoiceStreet: inputInvoiceStreet,
+             InvoiceZipCode: inputInvoiceZipCode,
+             InvoiceCountry: inputInvoiceCountry,
+             Status: inputStatus,
+            SendTextMessageValue: checkvisit,
+            CheckedItem1Value: surveysyes,
+             CheckedItem2Value:checkallads,
+             CheckedItem3Value:inputCheckedItem3Value,
+             CheckedItem4Value:inputCheckedItem4Value,
+             CheckedItem5Value:inputCheckedItem5Value,
+             CheckedItem6Value:inputCheckedItem6Value,
+             CheckedItem7Value: inputCheckedItem7Value,
+             AcceptMail: inputAcceptMail,
+             gender: inputgender,
+             titel: title,
+        }
+
+         var customerInput = new FastCheckInCustomerModel(customerData);
+
+       localStorage.CustomerInput = JSON.stringify(customerInput);
+     
+        const ele = document.getElementById("contentMainForm");
+        const url = '@ViewBag.config.url' + 'api/Sign/PostFirstPageHtml';
+
+            if (flag == true) {
+                var link = localStorage.ConfigURL + "ESignature/GetSettings";
+                window.location.href = link;
+            }
+            else {
+                ErrorMessage();
+                setTimeout(function () { window.location.reload(); }, 3000);
+
+            }
+
+    }
+
+    document.getElementById("signbtn").addEventListener("click", function () {
+
+
+        const url = '@ViewBag.config.url' + 'api/Sign/PostFirstPageHtml';
+        const btn = document.getElementById("signbtn")
+        const div1 = document.getElementById("div1");
+        const div2 = document.getElementById("div2");
+        const hiddenelements = document.getElementById("hiddendiv");
+        const surveysdiv = document.getElementById("surveysdiv");
+        surveysdiv.style.visibility = "visible";
+        if (erroremailflag) {
+            console.log(erroremailflag);
+
+        } else {
+            btn.style.display = "none";
+        }
+        erroremailflag = 0;
+        hiddenelements.style.display = "none";
+        div1.style.display = "none";
+        div2.style.display = "none";
+        const ele = document.getElementById("contentMainForm");
+
+        var opt = {
+            margin: -10,
+            image: { type: 'jpeg', quality: 0.688 },
+            html2canvas: { scale: 8 },
+        };
+
+       html2pdf().set(opt).from(ele).toPdf().output('datauristring').then(function (pdfAsString) {
+           const url = '@ViewBag.config.url' + 'api/Sign/PostFirstPageHtml';
+           debugger;
+           localStorage.f1 = localStorage.resno + "#" + pdfAsString;
+           //const jsonString = JSON.stringify(localStorage.resno + "#" + pdfAsString);
+
+
+        });
+
+    });
+    
+    var erroremailflag = 0;
+    function ErrorMessage(parameters) {
+        swal("You have entered an invalid email address!", {
+            buttons: false,
+            timer: 3000,
+        });
+
+    }
+
+
+
+
+     $('#resettext').click(function () {
+        if (curSize != 16)
+            $('#content').css('font-size', 16);
+    });
+
+    $('#IncreaseFont_Clicked').click(function () {
+        curSize = parseInt($('#contentMainForm').css('font-size')) + 1;
+        if (curSize < 20)
+            $('#contentMainForm').css('font-size', curSize);
+    });
+
+    $('#DecreaseFont_Clicked').click(function () {
+        curSize = parseInt($('#contentMainForm').css('font-size')) - 1;
+        if (curSize >= 18)
+            $('#contentMainForm').css('font-size', curSize);
+    });
+
+
+function ValidateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@@"]+(\.[^<>()\[\]\\.,;:\s@@"]+)*)|(".+"))@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
+
+
+    function setYesNoColor(yes, no, color) {
+
+        if (no == null) {
+        var property = document.getElementById(yes);
+            property.style.backgroundColor = color;
+            if (yes == "offersyes")
+                var property2 = document.getElementById("offersno");
+            else if (yes == "surveysyes")
+                var property2 = document.getElementById("surveysno");
+            else if (yes == "visityes")
+                 var property2 = document.getElementById("visitno");
+           else if (yes=="callyes")
+                var property2 = document.getElementById("callno");
+
+        property2.style.backgroundColor = "white";
+        }
+         if (yes == null ) {
+        var property = document.getElementById(no);
+             property.style.backgroundColor = color;
+             if(no=="offersno")
+                 var property2 = document.getElementById("offersyes");
+             else if (no == "surveysno")
+                 var property2 = document.getElementById("surveysyes");
+             else if (no == "visitno")
+                 var property2 = document.getElementById("visityes");
+             else if (no == "callno")
+                    var property2 = document.getElementById("callyes");
+
+
+        property2.style.backgroundColor = "white";
+
+         }
+    }
+
+
+
+function setColor(btn1,btn2,btn3, color){
+
+    if (btn2 == null && btn3 == null) {
+        var property = document.getElementById(btn1);
+        property.style.backgroundColor = color;
+         var property2 = document.getElementById("Mrs");
+        property2.style.backgroundColor = "white";
+        var property3 = document.getElementById("Ms");
+        property3.style.backgroundColor = "white";
+    }
+
+    if (btn1 == null && btn3 == null) {
+         var property = document.getElementById(btn2);
+        property.style.backgroundColor = "lightblue";
+
+
+        var property2 = document.getElementById("Mr");
+        property2.style.backgroundColor = "white";
+        var property3 = document.getElementById("Ms");
+        property3.style.backgroundColor = "white";
+    }
+
+        if (btn1 == null && btn2 == null) {
+        var property = document.getElementById(btn3);
+            property.style.backgroundColor = color;
+
+        var property2 = document.getElementById("Mr");
+        property2.style.backgroundColor = "white";
+        var property3 = document.getElementById("Mrs");
+        property3.style.backgroundColor = "white";
+        }
+
+    }
+
+
+
+
+
+</script>
+
+
+
+
+<style>
+
+    .privacystyling{
+        font-family:@privacy.fontFamily;
+    }
+
+    .entrystyling{
+     color:   @format.entryAttributes.textColor;
+    font-family: @format.entryAttributes.fontFamily;
+    }
+    I
+    .hiddenstyling{
+        visibility:hidden;
+        width:0px;
+        height:0px;
+        height:0px;
+        margin:0px;
+        padding:0px;
+        font-size:0px;
+        border:0 solid white;
+    }
+
+   html {
+       font-size:62.5%;
+       overflow:auto;
+   }
+
+
+    .btn:link,
+    .btn:hover
+    .btn:visited {
+        display: flex;
+        padding: 10px 30px;
+        font-weight: 300;
+        text-decoration: none;
+        border-radius: 0px;
+        -webkit-transition: background-color 0.2s, border 0.2s, color 0.2s;
+        transition: background-color 0.2s, border 0.2s, color 0.2s;
+    }
+
+    .btn-full:link,
+    .btn-full:visited
+   {
+        background-color: rgb(175,208,220);
+        border: 1px solid @format.sectionBackgroundColor;
+        color: #000;
+        margin-right: 15px;
+        border-radius:3%;
+    }
+
+        .btn:hover,
+        .btn:active
+         {
+            background-color: rgb(175,208,220);
+              filter: brightness(85%);
+        }
+
+    .btn-full:hover,
+    .btn-full:active {
+        border: 1px solid whitesmoke;
+
+    }
+
+
+    .labelstyling{
+        font-family:@format.labelAttributes.fontFamily;
+        color:@format.labelAttributes.textColor;
+    }
+
+    .headerstyling{
+        background-color:@format.headerAttributes.headerBackgroundColor;
+        font-size:@format.headerAttributes.headerFontSize;
+        font-weight:@format.headerAttributes.headerFontWeight;
+        color:@format.headerAttributes.headerFontColor;
+        font-family:@format.headerAttributes.headerfontFamily;
+    }
+
+    #inputFirstName:focus {
+        outline: none !important;
+        border: 1px solid gray;
+        box-shadow: 0 0 10px gray;
+    }
+
+    #inputLastName:focus {
+        outline: none !important;
+        border: 1px solid gray;
+        box-shadow: 0 0 10px gray;
+    }
+    #contentMainForm {
+
+        font-size:1.8rem;
+        border:10px solid white;
+        overflow:hidden;
+    }
+
+     .header-photo {
+    width: 100%;
+    margin: 0;
+    overflow: hidden;
+
+    background-color: @format.headerAttributes.headerBackgroundColor;
+}
+
+     body{ padding:0;}
+
+     html {
+        border:10px solid white;
+         margin: 0;
+         padding:0;
+       height:50%;
+     }
+
+.header-photo img {
+    opacity: 0.9;
+    width: 25%;
+    height: 75%;
+    -webkit-transform: scale(1.15);
+    -ms-transform: scale(1.15);
+    transform: scale(1.15);
+    -webkit-transition: -webkit-transform 0.5s, opacity 0.5s;
+    transition: transform 0.5s, opacity 0.5s;
+}
+
+.header-photo img:hover {
+    opacity: 1;
+    -webkit-transform: scale(1.03);
+    -ms-transform: scale(1.03);
+    transform: scale(1.03);
+}
+
+    .selection-button:hover {
+
+         cursor:pointer;
+           filter: brightness(85%);
+    }
+
+    select {
+    width: 7%;
+    margin: 0;
+    font-size: 100%;
+    padding: 5px 10px 5px 10px;
+    font-family: Segoe UI, Helvetica, sans-serif;
+    border: 0;
+    border: 1px solid #D0D0D0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    outline: none;
+    }
+</style>
+
+
+
